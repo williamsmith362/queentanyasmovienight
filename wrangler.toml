@@ -1,0 +1,37 @@
+# wrangler.toml
+# -----------------------------------------------------------------------------
+# Configuration for the OPTIONAL future backend (workers/api.js).
+#
+# The website itself (index.html, css/, js/) is a fully static site and
+# does NOT need this file to run — deploy it to Cloudflare Pages directly
+# (see README.md → "Deploy to Cloudflare Pages"), no build step required.
+#
+# This file only matters once you're ready to deploy the Worker stub in
+# workers/api.js, e.g. to add login, favorites, or R2-backed video
+# streaming. Until then, it's safe to ignore.
+# -----------------------------------------------------------------------------
+
+name = "queen-tanyas-movie-night-api"
+main = "workers/api.js"
+compatibility_date = "2026-07-01"
+
+# ---- Future storage bindings ------------------------------------------------
+# Uncomment and configure as each feature is built.
+
+# R2 bucket for storing/streaming video files instead of a local /videos
+# folder — lets the library grow without bloating the git repo, and lets
+# workers/api.js generate signed, temporary playback URLs.
+# [[r2_buckets]]
+# binding = "MOVIES_BUCKET"
+# bucket_name = "queen-tanyas-movie-night-videos"
+
+# KV namespace for lightweight data like favorites or watch history.
+# [[kv_namespaces]]
+# binding = "USERS_KV"
+# id = "replace-with-your-kv-namespace-id"
+
+# D1 (SQL) database, if favorites/profiles/watch history outgrow KV.
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "queen-tanyas-movie-night"
+# database_id = "replace-with-your-d1-database-id"

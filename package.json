@@ -1,0 +1,16 @@
+{
+  "name": "queen-tanyas-movie-night",
+  "version": "1.0.0",
+  "description": "A private, personal streaming site with a cute pastel-pink Netflix-style UI.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx serve . -l 8000",
+    "dev": "npx serve . -l 8000",
+    "deploy:pages": "npx wrangler pages deploy . --project-name=queen-tanyas-movie-night",
+    "deploy:worker": "npx wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

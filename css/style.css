@@ -1,0 +1,504 @@
+/* =============================================================================
+   style.css — Design tokens, resets, and layout regions
+   -----------------------------------------------------------------------------
+   This file owns the *structural* parts of the page: CSS variables (the
+   entire color/spacing/typography system), global resets, and the layout
+   for each major page region (nav, hero, search, library, player page,
+   footer, responsive breakpoints).
+
+   Reusable interactive pieces (buttons, chips, cards) live in components.css.
+   Keyframes and motion-related rules live in animations.css.
+
+   NOTHING in this file changes the visual appearance of the original
+   single-file version — it is a straight extraction, organized by purpose.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Design tokens
+   Central place for every color, radius, shadow, and font used on the site.
+   Changing a value here updates it everywhere — this is also the natural
+   place to introduce a dark/alternate theme later (see README → Themes).
+   ----------------------------------------------------------------------------- */
+:root {
+  /* Premium blush palette */
+  --color-primary: #f5afcb;
+  --color-primary-deep: #e77ca8;
+  --color-primary-deeper: #d85b8b;
+  --color-rose: #d85b8b;
+  --color-gold: #f2d18b;
+  --color-lavender: #eee7ff;
+
+  /* Text colors */
+  --color-ink: #40323a;
+  --color-ink-soft: #8a6672;
+  --color-ink-faint: #b98fa0;
+
+  /* Surfaces */
+  --color-surface: #ffffff;
+  --color-glass: rgba(255, 255, 255, 0.72);
+  --color-canvas: #fff8fa;
+  --color-canvas-deep: #fde7ef;
+  --color-line: #f6cfdd;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(216, 91, 139, 0.08), 0 14px 34px rgba(216, 91, 139, 0.12);
+  --shadow-card-hover: 0 10px 24px rgba(216, 91, 139, 0.16), 0 28px 52px rgba(216, 91, 139, 0.22);
+
+  /* Radii */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-display: "Poppins", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Spacing */
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* -----------------------------------------------------------------------------
+   Global resets
+   ----------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background:
+    linear-gradient(125deg, #fff8fa 0%, #fff1f6 24%, #fffaf1 48%, #eee7ff 72%, #fff8fa 100%);
+  background-size: 300% 300%;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  animation: blush-drift 60s ease-in-out infinite;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+/* Consistent, visible focus ring for keyboard users across every
+   interactive element on the site. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+video:focus-visible {
+  outline: 2px solid var(--color-primary-deeper);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* -----------------------------------------------------------------------------
+   Top navigation
+   ----------------------------------------------------------------------------- */
+.site-nav {
+  position: sticky;
+  top: 0.7rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(calc(100% - 1.5rem), 76rem);
+  margin: 0 auto;
+  padding: 0.72rem 0.8rem 0.72rem 1rem;
+  background: rgba(255, 255, 255, 0.64);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(246, 207, 221, 0.78);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 14px 40px rgba(216, 91, 139, 0.12);
+}
+
+.site-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-ink);
+}
+
+.site-nav__links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Hero header
+   ----------------------------------------------------------------------------- */
+.hero {
+  min-height: min(78vh, 45rem);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(7rem, 12vw, 10rem) var(--gutter) clamp(3.5rem, 7vw, 5rem);
+  margin-top: -4.8rem;
+  background: #1c1217;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__art {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.92);
+  opacity: 0.78;
+  transform: scale(1.02);
+  transition: background-image 0.6s var(--ease), opacity 0.6s var(--ease), transform 7s ease;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(64, 50, 58, 0.88) 0%, rgba(64, 50, 58, 0.54) 38%, rgba(64, 50, 58, 0.08) 100%),
+    linear-gradient(0deg, var(--color-canvas) 0%, rgba(255, 248, 250, 0) 42%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 42rem);
+  color: #fff;
+  animation: fade-in-up 0.7s var(--ease) both;
+}
+
+.hero__eyebrow,
+.section-kicker,
+.player-info__eyebrow {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0;
+  font-size: clamp(2.45rem, 6.5vw, 5.8rem);
+  line-height: 0.98;
+  color: #fff;
+  text-shadow: 0 12px 40px rgba(0, 0, 0, 0.24);
+}
+
+.hero__subtitle {
+  margin: 1rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(0.98rem, 1.6vw, 1.08rem);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.home-rows {
+  display: grid;
+  gap: clamp(1.8rem, 4vw, 3rem);
+  padding: 0 0 2.5rem;
+  overflow: hidden;
+}
+
+.library-tools {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem) var(--gutter) 2rem;
+}
+
+.content-row {
+  padding: 0 var(--gutter);
+  min-width: 0;
+}
+
+.content-row[hidden] {
+  display: none;
+}
+
+.content-row__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: min(100%, 82rem);
+  min-width: 0;
+  margin: 0 auto 0.9rem;
+}
+
+.content-row__header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.section-kicker {
+  color: var(--color-rose);
+}
+
+.media-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(10rem, 17vw, 14.5rem);
+  gap: 1rem;
+  width: min(100%, 82rem);
+  min-width: 0;
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0.25rem 1rem;
+  scroll-snap-type: x proximity;
+  scrollbar-color: rgba(216, 91, 139, 0.36) transparent;
+}
+
+/* -----------------------------------------------------------------------------
+   Search region
+   ----------------------------------------------------------------------------- */
+.search-wrap {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.search-meta {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  margin: 0.65rem 0 0;
+  min-height: 1.2em;
+}
+
+/* -----------------------------------------------------------------------------
+   Category filter row (chip styling itself lives in components.css)
+   ----------------------------------------------------------------------------- */
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1.5rem var(--gutter) 0;
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+.collection-filters {
+  padding-top: 0;
+}
+
+.episode-finder {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1.2fr) minmax(8rem, 0.8fr) minmax(12rem, 1.4fr) auto;
+  gap: 0.65rem;
+  width: min(100%, 62rem);
+  margin: 0 auto;
+}
+
+.episode-finder__field {
+  min-width: 0;
+}
+
+.episode-finder__button {
+  align-self: end;
+}
+
+/* -----------------------------------------------------------------------------
+   Library grid region
+   ----------------------------------------------------------------------------- */
+.library {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 1.75rem var(--gutter) 5rem;
+}
+
+.library__heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  margin: 0 0 1.1rem;
+  color: var(--color-ink-soft);
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.35rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--color-ink-soft);
+  animation: fade-in-up 0.4s var(--ease) both;
+}
+
+.empty-state__heart {
+  font-size: 1.75rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* -----------------------------------------------------------------------------
+   Player page layout (the <video> element + controls styling live in
+   components.css since they're reusable "player controls" components)
+   ----------------------------------------------------------------------------- */
+.player-page {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 4rem;
+}
+
+.player-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #241017;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(64, 50, 58, 0.28);
+  animation: fade-in-up 0.45s var(--ease) both;
+}
+
+.player-frame video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000;
+}
+
+.player-info {
+  margin-top: 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(246, 207, 221, 0.82);
+  border-radius: 24px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  animation: fade-in-up 0.5s var(--ease) 0.05s both;
+}
+
+.player-info__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0;
+  font-size: clamp(1.55rem, 3vw, 2.4rem);
+  margin: 0 0 0.4rem;
+}
+
+.player-info__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.player-info__desc {
+  margin: 0;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* -----------------------------------------------------------------------------
+   Footer
+   ----------------------------------------------------------------------------- */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem 2.5rem;
+  color: var(--color-ink-faint);
+  font-size: 0.8rem;
+}
+
+.related-section {
+  margin-top: 2.5rem;
+}
+
+/* -----------------------------------------------------------------------------
+   View switching (library vs. player) — the tiny single-page-app router
+   in js/router.js toggles the `.is-active` class on these.
+   ----------------------------------------------------------------------------- */
+.view {
+  display: none;
+}
+
+.view.is-active {
+  display: block;
+}
+
+/* -----------------------------------------------------------------------------
+   Responsive adjustments
+   ----------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .site-nav {
+    border-radius: 22px;
+  }
+
+  .site-nav__brand {
+    font-size: 0.86rem;
+  }
+
+  .site-nav__links button {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.83rem;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .hero {
+    min-height: 34rem;
+    padding-top: 8rem;
+  }
+
+  .hero__actions {
+    display: grid;
+  }
+
+  .media-rail {
+    grid-auto-columns: 10rem;
+  }
+
+  .episode-finder {
+    grid-template-columns: 1fr;
+  }
+
+  .player-info {
+    padding: 1.15rem 1.25rem;
+  }
+}
