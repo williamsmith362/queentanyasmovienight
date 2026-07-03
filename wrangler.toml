@@ -11,7 +11,7 @@
 # streaming. Until then, it's safe to ignore.
 # -----------------------------------------------------------------------------
 
-name = "queen-tanyas-movie-night-api"
+name = "qtmn"
 main = "workers/api.js"
 compatibility_date = "2026-07-01"
 
